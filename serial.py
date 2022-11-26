@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
+import json
 import serial
+from kafka import KafkaProducer
 
 FAKE = os.getenv("FAKE") is not None
 
@@ -20,8 +22,10 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
+  producer = KafkaProducer(bootstrap_servers="164.132.55.244:9092", value_serializer=lambda x: json.dumps(x).encode("utf-8"))  
+
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
   while True:
-    print(fetcher(ser))
+    producer.send("air", fetcher(ser))
