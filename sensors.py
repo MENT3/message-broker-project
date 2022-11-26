@@ -22,7 +22,8 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  producer = KafkaProducer(bootstrap_servers="164.132.55.244:9092", value_serializer=lambda x: json.dumps(x).encode("utf-8"))  
+  producer = KafkaProducer(bootstrap_servers="209.97.180.161:9092", value_serializer=lambda x: json.dumps(x).encode("utf-8"))  
+  print(producer)
 
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
