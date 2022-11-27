@@ -1,0 +1,5 @@
+- [ ] Docker keep changes after drop droplet
+- [ ] Whoop API Call
+- [ ] Cool dashboard
+- [ ] Raspberry
+- [ ] Presentation suppport
