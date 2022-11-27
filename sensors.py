@@ -2,9 +2,10 @@
 import os
 import json
 import serial
-from kafka import KafkaProducer
+from confluent_kafka import Producer
 
 FAKE = os.getenv("FAKE") is not None
+DATA_KEYS = ["humidite", "luminosite", "temperature"]
 
 def get_values(serial_port):
   row = serial_port.readline().decode("utf-8").strip()
@@ -22,11 +23,12 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  producer = KafkaProducer(bootstrap_servers="209.97.180.161:9092", value_serializer=lambda x: json.dumps(x).encode("utf-8"))  
-  print(producer)
-
+  p = Producer({ "bootstrap.servers": "209.97.180.161:9092" })
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
   while True:
-    producer.send("air", fetcher(ser))
+    data = dict(zip(DATA_KEYS, fetcher(ser)))
+    print(data)
+    p.produce("air", json.dumps(data).encode("utf-8"))
+    p.flush()
