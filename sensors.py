@@ -23,7 +23,7 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  p = Producer({ "bootstrap.servers": "209.97.180.161:9092" })
+  p = Producer({ "bootstrap.servers": "159.65.16.140:9092" })
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
