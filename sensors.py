@@ -2,6 +2,7 @@
 import os
 import json
 import serial
+from time import sleep
 from confluent_kafka import Producer
 
 FAKE = os.getenv("FAKE") is not None
@@ -13,8 +14,6 @@ def get_values(serial_port):
 
 def generate_random_values(_):
   import random as rand
-  from time import sleep
-  sleep(1)
   return [
     round(rand.uniform(60, 80), 1),
     rand.randint(300, 400),
@@ -23,7 +22,7 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  p = Producer({ "bootstrap.servers": "159.65.16.140:9092" })
+  p = Producer({ "bootstrap.servers": "104.248.163.233:9092" })
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
@@ -32,3 +31,4 @@ if __name__ == "__main__":
     print(data)
     p.produce("air", json.dumps(data).encode("utf-8"))
     p.flush()
+    sleep(60)
