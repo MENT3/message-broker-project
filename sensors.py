@@ -6,6 +6,7 @@ from time import sleep
 from confluent_kafka import Producer
 
 FAKE = os.getenv("FAKE") is not None
+KAFKA_IP = os.getenv("KAFKA_IP", "localhost")
 DATA_KEYS = ["humidite", "luminosite", "temperature"]
 
 def get_values(serial_port):
@@ -22,7 +23,7 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  p = Producer({ "bootstrap.servers": "104.248.163.233:9092" })
+  p = Producer({ "bootstrap.servers": KAFKA_IP + ":9092" })
   ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
