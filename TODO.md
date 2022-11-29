@@ -1,5 +1,5 @@
-- [ ] Docker keep changes after drop droplet
-- [ ] Whoop API Call
+- [x] Whoop API Call
+- [ ] Datetime as kafka key
 - [ ] Cool dashboard
 - [ ] Raspberry
 - [ ] Presentation suppport
