@@ -3,9 +3,11 @@ import os
 import json
 import serial
 from time import sleep
+from datetime import datetime
 from confluent_kafka import Producer
 
 FAKE = os.getenv("FAKE") is not None
+DEBUG = os.getenv("DEBUG") is not None
 KAFKA_IP = os.getenv("KAFKA_IP", "localhost")
 DATA_KEYS = ["humidite", "luminosite", "temperature"]
 
@@ -29,7 +31,9 @@ if __name__ == "__main__":
 
   while True:
     data = dict(zip(DATA_KEYS, fetcher(ser)))
-    print(data)
-    p.produce("air", json.dumps(data).encode("utf-8"))
+    data["datetime"] = datetime.isoformat(datetime.now())
+
+    if DEBUG: print(data)
+    p.produce("sensors", json.dumps(data).encode("utf-8"))
     p.flush()
     sleep(60)
