@@ -4,7 +4,7 @@ import json
 import serial
 from time import sleep
 from datetime import datetime
-from confluent_kafka import Producer
+from kafka import KafkaProducer
 
 FAKE = os.getenv("FAKE") is not None
 DEBUG = os.getenv("DEBUG") is not None
@@ -25,8 +25,8 @@ def generate_random_values(_):
   ]
 
 if __name__ == "__main__":
-  p = Producer({ "bootstrap.servers": KAFKA_IP + ":9092" })
-  ser = serial.Serial("/dev/cu.usbserial-10", 9600) if not FAKE else None
+  p = KafkaProducer(bootstrap_servers=KAFKA_IP + ":9092")
+  ser = serial.Serial("/dev/ttyUSB0", 9600) if not FAKE else None
   fetcher = get_values if not FAKE else generate_random_values
 
   while True:
@@ -34,6 +34,5 @@ if __name__ == "__main__":
     data["datetime"] = datetime.isoformat(datetime.now())
 
     if DEBUG: print(data)
-    p.produce("sensors", json.dumps(data).encode("utf-8"))
-    p.flush()
+    p.send("sensors", json.dumps(data).encode("utf-8"))
     sleep(60)
