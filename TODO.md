@@ -1,8 +1,8 @@
 - [x] Whoop API Call
-- [ ] Weather producer
-- [ ] Weahter diagram
-- [ ] Datetime as kafka key
+- [x] Weather producer
+- [x] Weahter diagram
+- [x] Datetime as kafka key
 - [ ] Cool dashboard
-- [ ] Raspberry
+- [x] Raspberry
 - [ ] Presentation suppport
 
